@@ -79,7 +79,7 @@
 
     <!-- Контент после ввода пароля -->
     <div id="content">
-        <a href="silence.wav" class="download-link">silence.wav</a>
+        <a href="silence.wav" class="download-link" id="audio-download">silence.wav</a>
         <div class="hint">Вслушайся в тишину</div>
     </div>
 
@@ -94,6 +94,24 @@
             } else {
                 alert("Неверный пароль");
             }
+        });
+
+        // Перенаправление после скачивания
+        document.getElementById('audio-download').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Создаем скрытую ссылку для скачивания
+            const downloadLink = document.createElement('a');
+            downloadLink.href = 'silence.wav';
+            downloadLink.download = 'silence.wav';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            // Перенаправление через 2 секунды (после скачивания)
+            setTimeout(function() {
+                window.location.href = 'https://nermixon.github.io/phoenix1step3/';
+            }, 2000);
         });
     </script>
 </body>
