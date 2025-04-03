@@ -68,7 +68,6 @@
     </style>
 </head>
 <body>
-    <!-- Экран с паролем -->
     <div id="password-screen">
         <h1>ДОСТУП ЗАКРЫТ</h1>
         <form id="password-form">
@@ -77,18 +76,33 @@
         </form>
     </div>
 
-    <!-- Контент после ввода пароля -->
     <div id="content">
-        <a href="silence.wav" class="download-link" id="audio-download">silence.wav</a>
+        <a href="#" class="download-link" id="audio-download">silence.wav</a>
         <div class="hint">Вслушайся в тишину</div>
     </div>
 
     <script>
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+                document.body.innerHTML = '<h1 style="color:red">ДОСТУП ЗАПРЕЩЁН</h1>';
+                window.location.href = 'about:blank';
+            }
+        });
+
         document.getElementById('password-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const password = document.getElementById('password').value;
+            const encrypted = [55, 38, 54, 56];
+            const key = 0x55;
+            const realPass = encrypted.map(function(c) {
+                return String.fromCharCode(c ^ key);
+            }).join('');
             
-            if (password === "RISE") {
+            if (password === realPass) {
                 document.getElementById('password-screen').style.display = 'none';
                 document.getElementById('content').style.display = 'flex';
             } else {
@@ -96,19 +110,140 @@
             }
         });
 
-        // Перенаправление после скачивания
         document.getElementById('audio-download').addEventListener('click', function(e) {
             e.preventDefault();
+            const link = document.createElement('a');
+            link.href = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+            link.download = 'silence.wav';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(function() {
+                window.location.href = 'https://nermixon.github.io/phoenix1step3/';
+            }, 2000);
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ФЕНИКС-1|ТИШИНА</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: #000;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        #password-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        #password-form input {
+            padding: 10px;
+            margin: 10px;
+            background: #111;
+            color: #fff;
+            border: 1px solid #333;
+            text-align: center;
+        }
+        #password-form button {
+            padding: 10px 20px;
+            background: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        #content {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        .download-link {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        .download-link:hover {
+            opacity: 0.7;
+        }
+        .hint {
+            font-size: 18px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div id="password-screen">
+        <h1>ДОСТУП ЗАКРЫТ</h1>
+        <form id="password-form">
+            <input type="password" id="password" placeholder="Введите пароль">
+            <button type="submit">Войти</button>
+        </form>
+    </div>
+
+    <div id="content">
+        <a href="#" class="download-link" id="audio-download">silence.wav</a>
+        <div class="hint">Вслушайся в тишину</div>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+                document.body.innerHTML = '<h1 style="color:red">ДОСТУП ЗАПРЕЩЁН</h1>';
+                window.location.href = 'about:blank';
+            }
+        });
+
+        document.getElementById('password-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const encrypted = [55, 38, 54, 56];
+            const key = 0x55;
+            const realPass = encrypted.map(function(c) {
+                return String.fromCharCode(c ^ key);
+            }).join('');
             
-            // Создаем скрытую ссылку для скачивания
-            const downloadLink = document.createElement('a');
-            downloadLink.href = 'silence.wav';
-            downloadLink.download = 'silence.wav';
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-            
-            // Перенаправление через 2 секунды (после скачивания)
+            if (password === realPass) {
+                document.getElementById('password-screen').style.display = 'none';
+                document.getElementById('content').style.display = 'flex';
+            } else {
+                alert("Неверный пароль");
+            }
+        });
+
+        document.getElementById('audio-download').addEventListener('click', function(e) {
+            e.preventDefault();
+            const link = document.createElement('a');
+            link.href = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+            link.download = 'silence.wav';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
             setTimeout(function() {
                 window.location.href = 'https://nermixon.github.io/phoenix1step3/';
             }, 2000);
